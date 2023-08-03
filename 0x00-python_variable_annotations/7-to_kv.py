@@ -9,4 +9,5 @@ def to_kv(k: str, v: typing.Union[int, float]) -> typing.Tuple[str, float]:
     """
     return `k` and `v` as a tuple
     """
-    return (k, v)
+    rv: typing.Tuple[str, float] = (k, v)
+    return rv
