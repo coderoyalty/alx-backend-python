@@ -2,10 +2,10 @@
 """
 9-element length
 """
-import typing
+from typing import Iterable, List, Sequence, Tuple
 
 
-def element_length(lst: typing.Iterable[typing.Sequence]) -> typing.List[typing.Tuple[typing.Sequence, int]]:
+def element_length(lst: Iterable[Sequence]) -> List[Tuple[Sequence, int]]:
     """
     length of iterable
     """
