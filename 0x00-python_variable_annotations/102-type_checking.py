@@ -5,7 +5,7 @@ type checking
 import typing
 
 
-def zoom_array(lst: typing.Tuple, factor: int = 2) -> typing.List:
+def zoom_array(lst: typing.List, factor: int = 2) -> typing.List:
     """
     zoom array
     """
