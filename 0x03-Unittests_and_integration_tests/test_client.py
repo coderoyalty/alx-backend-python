@@ -82,12 +82,33 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     def setUpClass(self):
         """method to create a patch, and mock the `requests.get`"""
         self.get_patcher = patch('requests.get')
-        self.get_patcher.return_value.json.side_effect = [
+        self.mock = self.get_patcher.start()
+        self.mock.return_value.json.side_effect = [
             self.org_payload, self.repos_payload,
-            self.expected_repos, self.apache2_repos,
+            self.org_payload, self.repos_payload,
         ]
 
     @classmethod
     def tearDownClass(self):
         """method to stop the patch"""
         self.get_patcher.stop()
+
+    def test_public_repos(self):
+        """
+        integration test for public_repos
+        """
+        client = GithubOrgClient('apple')
+        self.assertEqual(client.org, self.org_payload)
+        self.assertEqual(client.repos_payload, self.repos_payload)
+        self.assertEqual(client.public_repos(), self.expected_repos)
+        self.mock.assert_called()
+
+    def test_public_repos_with_license(self):
+        """
+        integration test for public_repos with license
+        """
+        client = GithubOrgClient('apple')
+        self.assertEqual(client.public_repos(), self.expected_repos)
+        self.assertEqual(client.public_repos(
+            license="apache-2.0"), self.apache2_repos)
+        self.mock.assert_called()
