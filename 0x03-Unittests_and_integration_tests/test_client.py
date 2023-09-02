@@ -4,6 +4,7 @@ unittest for utils.py
 """
 import unittest
 import unittest.mock
+from unittest.mock import patch
 from parameterized import parameterized
 from client import GithubOrgClient, get_json
 
@@ -35,7 +36,7 @@ class TestGithubOrgClient(unittest.TestCase):
             res = client._public_repos_url
             self.assertEqual(res, payload["repos_url"])
 
-    @unittest.mock.patch('client.get_json')
+    @patch('client.get_json')
     def test_public_repos(self, get_mock):
         """unittest public_repos"""
         payload = [{"name": "coderoyalty"}]
@@ -46,7 +47,7 @@ class TestGithubOrgClient(unittest.TestCase):
             new_callable=unittest.mock.PropertyMock
         ) as prop_mock:
             client = GithubOrgClient('coddies')
-            prop_mock.return_value = "coderoyalty"
+            prop_mock.return_value = "code/royalty"
             repos = client.public_repos()
             self.assertEqual(repos, [repo["name"] for repo in payload])
             prop_mock.assert_called_once()
