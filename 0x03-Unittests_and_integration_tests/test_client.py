@@ -46,7 +46,7 @@ class TestGithubOrgClient(unittest.TestCase):
             new_callable=unittest.mock.PropertyMock
         ) as prop_mock:
             client = GithubOrgClient('coddies')
-            prop_mock.return_value = payload
+            prop_mock.return_value = "coderoyalty"
             repos = client.public_repos()
             self.assertEqual(repos, [repo["name"] for repo in payload])
             prop_mock.assert_called_once()
