@@ -5,8 +5,9 @@ unittest for utils.py
 import unittest
 import unittest.mock
 from unittest.mock import patch
-from parameterized import parameterized
+from parameterized import parameterized, parameterized_class
 from client import GithubOrgClient, get_json
+from fixtures import TEST_PAYLOAD
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -65,3 +66,28 @@ class TestGithubOrgClient(unittest.TestCase):
         """test for has_license"""
         client = GithubOrgClient('test')
         self.assertEqual(client.has_license(repo, license), expected)
+
+
+@parameterized_class((
+    "org_payload", "repos_payload",
+    "expected_repos", "apache2_repos"
+), TEST_PAYLOAD
+)
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """
+    client.GithubOrgClient integration test
+    """
+
+    @classmethod
+    def setUpClass(self):
+        """method to create a patch, and mock the `requests.get`"""
+        self.get_patcher = patch('requests.get')
+        self.get_patcher.return_value.json.side_effect = [
+            self.org_payload, self.repos_payload,
+            self.expected_repos, self.apache2_repos,
+        ]
+
+    @classmethod
+    def tearDownClass(self):
+        """method to stop the patch"""
+        self.get_patcher.stop()
